@@ -1,17 +1,16 @@
-import Piece from './Piece'
+import Piece from './piece';
 
 class King extends Piece {
-    constructor(x, y, side) {
-        super(x, y, side);
-        this.name = 'king';
-        this.display = `<i class="fas fa-chess-king ${side}"></i>`;//fontawesome king
-    }
-    findLegalMoves() {
+  constructor(x, y, side) {
+    super(x, y, side);
+    this.name = 'king';
+    this.display = `<i class="fas fa-chess-king ${side}"></i>`; //fontawesome king
+  }
+  findLegalMoves() {
+    const possibleMoves = [];
 
-        const possibleMoves = [];
-
-        return possibleMoves;
-    }
+    return possibleMoves;
+  }
 }
 
 export default King;

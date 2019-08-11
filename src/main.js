@@ -1,9 +1,7 @@
-import setup from './setup'
+import setup from './setup';
 
 //checkWinner();
 
 //changePlayer(); to wszystko na później
 
-
-window.onload = setup
-
+window.onload = setup;

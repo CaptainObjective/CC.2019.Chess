@@ -1,4 +1,4 @@
-import Piece from './Piece';
+import Piece from './piece';
 
 class Pawn extends Piece {
   constructor(x, y, side) {
