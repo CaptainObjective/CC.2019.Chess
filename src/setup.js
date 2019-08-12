@@ -7,6 +7,7 @@ const setup = () => {
     for (let y = 0; y < board[x].length; y++) {
       const square = document.createElement('div');
       square.id = `${x},${y}`;
+      console.log(square.id)
       // square.innerHTML = `${x}, ${y}`;// by lepiej widzieć indeksy
       square.innerHTML = board[x][y] ? board[x][y].display : '';
       square.className = 'square';
