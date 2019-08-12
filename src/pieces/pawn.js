@@ -7,11 +7,20 @@ class Pawn extends Piece {
     this.display = `<i class="fas fa-chess-pawn ${side}"></i>`;
   }
   findLegalMoves() {
-    // console.log(this.x, this.y);
     const possibleMoves = [];
-    if (this.side == 'white') {
-      this.x - 1 > 0 && possibleMoves.push(`${this.x - 1},${this.y}`);
-      this.x - 2 > 0 && possibleMoves.push(`${this.x - 2},${this.y}`);
+    if (this.name == 'pawn') {
+      if (this.side == 'black') {
+        if (this.x === 1) {
+          possibleMoves.push(`${this.x + 2},${this.y}`);
+        }
+        (this.x + 1 <= 7) && possibleMoves.push(`${this.x + 1},${this.y}`);
+      }
+      if (this.side == 'white') {
+        if (this.x === 6) {
+          possibleMoves.push(`${this.x - 2},${this.y}`);
+        }
+        (this.x - 1 >= 0) && possibleMoves.push(`${this.x - 1},${this.y}`);
+      }
     }
     return possibleMoves;
   }
