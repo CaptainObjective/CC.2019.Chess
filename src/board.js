@@ -14,5 +14,9 @@ for (let i = 0; i < 8; i++) {
   board[pawn.x][pawn.y] = pawn;
 }
 // MareK: pionki ustawione
-console.log(board[6][4].prototype);
+
 export default board;
+
+const mov = board[6][4].findLegalMoves();
+console.log(mov);
+console.log(document.getElementById('6,4'));
