@@ -1,6 +1,9 @@
 import Pawn from './pieces/pawn';
+
+import Rook from './pieces/rook';
 import Knight from './pieces/knight';
 import King from './pieces/king';
+
 
 const board = new Array(8);
 for (let i = 0; i < 8; i++) {
@@ -24,5 +27,15 @@ let king = new King(0, 4, 'black');
 board[king.x][king.y] = king;
 king = new King(7, 4, 'white');
 board[king.x][king.y] = king;
+
+let rook = new Rook(0, 0, 'white');
+board[rook.x][rook.y] = rook;
+rook = new Rook(0, 7, 'white');
+board[rook.x][rook.y] = rook;
+
+rook = new Rook(7, 0, 'black');
+board[rook.x][rook.y] = rook;
+rook = new Rook(7, 7, 'black');
+board[rook.x][rook.y] = rook;
 
 export default board;
