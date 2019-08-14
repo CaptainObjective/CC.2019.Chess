@@ -16,7 +16,3 @@ for (let i = 0; i < 8; i++) {
 // MareK: pionki ustawione
 
 export default board;
-
-const mov = board[6][4].findLegalMoves();
-console.log(mov);
-console.log(document.getElementById('6,4'));
