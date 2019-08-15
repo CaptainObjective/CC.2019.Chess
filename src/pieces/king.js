@@ -1,15 +1,11 @@
 import Piece from './piece';
-import board from '../board';
+import { cordToPosition, isMoveOutOfBoard, isMoveOnPiece, generateOpponentMoves } from './utils';
 
 class King extends Piece {
   constructor(x, y, side) {
     super(x, y, side);
     this.name = 'king';
     this.display = `<i class="fas fa-chess-king ${side}"></i>`; //fontawesome king
-  }
-
-  cordToPosition(x, y) {
-    return `${x},${y}`;
   }
 
   generateMoves() {
@@ -19,31 +15,8 @@ class King extends Piece {
     ]);
   }
 
-  generateOpponentMoves() {
-    const opponentMoves = new Set();
-    for (let row of board) {
-      for (let el of row) {
-        if (el && el.side !== this.side) {
-          for (let move of el.findLegalMoves(true)) {
-            opponentMoves.add(move);
-          }
-        }
-      }
-    }
-    return opponentMoves;
-  }
-
   isMoveCheckmate(x, y, opponentMoves) {
-    return opponentMoves.has(this.cordToPosition(x, y));
-  }
-
-  isMoveOnOwnPiece(x, y) {
-    return board[x][y] && board[x][y].side === this.side;
-  }
-
-  isMoveOutOfBoard(x, y) {
-    const isOutOfBoardRange = v => v < 0 || v > 7;
-    return isOutOfBoardRange(x) || isOutOfBoardRange(y);
+    return opponentMoves.has(cordToPosition(x, y));
   }
 
   findLegalMoves(opponentSide = false) {
@@ -52,18 +25,18 @@ class King extends Piece {
 
   findLegalMovesOpponentSide() {
     const possibleMoves = this.generateMoves();
-    return possibleMoves.filter(([x, y]) => !this.isMoveOutOfBoard(x, y)).map(([x, y]) => this.cordToPosition(x, y));
+    return possibleMoves.filter(([x, y]) => !isMoveOutOfBoard(x, y)).map(([x, y]) => cordToPosition(x, y));
   }
 
   findLegalMovesThisSide() {
     const possibleMoves = this.generateMoves();
-    const opponentMoves = this.generateOpponentMoves();
+    const opponentMoves = generateOpponentMoves(this.side);
     return possibleMoves
       .filter(
         ([x, y]) =>
-          !(this.isMoveOutOfBoard(x, y) || this.isMoveOnOwnPiece(x, y) || this.isMoveCheckmate(x, y, opponentMoves)),
+          !(isMoveOutOfBoard(x, y) || isMoveOnPiece(this.side)(x, y) || this.isMoveCheckmate(x, y, opponentMoves)),
       )
-      .map(([x, y]) => this.cordToPosition(x, y));
+      .map(([x, y]) => cordToPosition(x, y));
   }
 }
 
