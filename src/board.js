@@ -3,6 +3,7 @@ import Rook from './pieces/rook';
 import Bishop from './pieces/bishop';
 import Knight from './pieces/knight';
 import King from './pieces/king';
+import Queen from './pieces/queen';
 
 const board = new Array(8);
 for (let i = 0; i < 8; i++) {
@@ -31,6 +32,11 @@ let king = new King(0, 4, 'black');
 board[king.x][king.y] = king;
 king = new King(7, 4, 'white');
 board[king.x][king.y] = king;
+
+let queen = new Queen(0, 3, 'black');
+board[queen.x][queen.y] = queen;
+queen = new Queen(7, 3, 'white');
+board[queen.x][queen.y] = queen;
 
 let rook = new Rook(0, 0, 'black');
 board[rook.x][rook.y] = rook;
