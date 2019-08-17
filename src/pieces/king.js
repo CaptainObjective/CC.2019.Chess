@@ -1,5 +1,5 @@
 import Piece from './piece';
-import { cordToPosition, isMoveOutOfBoard, isMoveOnPiece, generateOpponentMoves } from './utils';
+import { cordToPosition, isMoveOutOfBoard, isMoveOnOwnPiece, filterToPosition, generateOpponentMoves } from './utils';
 
 class King extends Piece {
   constructor(x, y, side) {
@@ -25,18 +25,16 @@ class King extends Piece {
 
   findLegalMovesOpponentSide() {
     const possibleMoves = this.generateMoves();
-    return possibleMoves.filter(([x, y]) => !isMoveOutOfBoard(x, y)).map(([x, y]) => cordToPosition(x, y));
+    const filterFn = (x, y) => isMoveOutOfBoard(x, y);
+    return filterToPosition(possibleMoves, filterFn);
   }
 
   findLegalMovesThisSide() {
     const possibleMoves = this.generateMoves();
     const opponentMoves = generateOpponentMoves(this.side);
-    return possibleMoves
-      .filter(
-        ([x, y]) =>
-          !(isMoveOutOfBoard(x, y) || isMoveOnPiece(this.side)(x, y) || this.isMoveCheckmate(x, y, opponentMoves)),
-      )
-      .map(([x, y]) => cordToPosition(x, y));
+    const filterFn = (x, y) =>
+      isMoveOutOfBoard(x, y) || isMoveOnOwnPiece(this.side, x, y) || this.isMoveCheckmate(x, y, opponentMoves);
+    return filterToPosition(possibleMoves, filterFn);
   }
 }
 

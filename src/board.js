@@ -28,10 +28,10 @@ board[knight.x][knight.y] = knight;
 knight = new Knight(7, 6, 'white');
 board[knight.x][knight.y] = knight;
 
-let king = new King(0, 4, 'black');
-board[king.x][king.y] = king;
-king = new King(7, 4, 'white');
-board[king.x][king.y] = king;
+const blackKing = new King(0, 4, 'black');
+board[blackKing.x][blackKing.y] = blackKing;
+const whiteKing = new King(7, 4, 'white');
+board[whiteKing.x][whiteKing.y] = whiteKing;
 
 let queen = new Queen(0, 3, 'black');
 board[queen.x][queen.y] = queen;
@@ -59,3 +59,4 @@ bishop = new Bishop(7, 5, 'white');
 board[bishop.x][bishop.y] = bishop;
 
 export default board;
+export { blackKing, whiteKing };
