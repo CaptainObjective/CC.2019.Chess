@@ -4,6 +4,7 @@ import Queen from './queen';
 import Bishop from './bishop';
 import Knight from './knight';
 import Rook from './rook';
+import {gameReport, notation, reloadReport} from '../reporting';
 
 class Pawn extends Piece {
   
@@ -87,6 +88,7 @@ class Pawn extends Piece {
   }
 
   promoTouched(piece) {
+    let el;
     //clearing previous place
     board[this.x][this.y] = null;
     document.getElementById(`${this.x},${this.y}`).innerHTML = '';
@@ -108,7 +110,11 @@ class Pawn extends Piece {
     }
     document.getElementById(`${this.x},${this.y}`).innerHTML = board[this.x][this.y].display;
 
-    let el = document.getElementById('wrapper');
+    gameReport[gameReport.length - 1].pawnPromoTo = piece[0].toUpperCase(); // dodanie do ostatniej pozycji w `gameReport` informacji o wyboranej figurze (promocja)
+    // console.log(gameReport.length + '. ' + notation(gameReport.length - 1)); // wyświetlenie ostatniego wpisu znotyfikowanego raportu gry
+    reloadReport();
+
+    el = document.getElementById('wrapper');
     el.removeChild(el.lastChild);
   }
   

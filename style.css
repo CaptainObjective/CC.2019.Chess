@@ -61,3 +61,17 @@ html{
     padding-left: 0;
 }
 /* ================================== */
+
+/* ===== ostylowanie `gameReport` ===== */
+.rprt {
+    width: 20vh;
+    height: 80vh;
+    transform: translate(-30px,2px);
+}
+
+.rprt .pre-scrollable {
+    background-color: whitesmoke;
+    outline: 1px lightgray solid;
+    min-height: 94%;
+}
+/* ==================================== */

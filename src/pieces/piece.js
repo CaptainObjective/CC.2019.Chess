@@ -1,4 +1,6 @@
 import board from '../board';
+import {rprtSaveState, rprtSaveMvmnt} from '../reporting';
+// import gameReport from '../reporting';
 
 class Piece {
   constructor(x, y, side) {
@@ -10,6 +12,9 @@ class Piece {
     const newX = Number(id[0]);
     const newY = Number(id[2]);
 
+    // zapisuje do raportu (tablica `gameRaport` z `reporting.js`) parametry posunięcia
+    rprtSaveMvmnt(this.side, board[this.x][this.y].name, `${this.x},${this.y}`, `${newX},${newY}`, !!board[newX][newY]);
+
     //clearing previous place
     board[this.x][this.y] = null;
     document.getElementById(`${this.x},${this.y}`).innerHTML = '';
@@ -19,6 +24,8 @@ class Piece {
     this.y = newY;
     board[this.x][this.y] = this;
     document.getElementById(id).innerHTML = this.display;
+
+    rprtSaveState(board); // dodatkow zapisuje stan szachownicy po wykonaniu ruchu (`reporting.js`)
   }
 
   findLegalMoves() {}
