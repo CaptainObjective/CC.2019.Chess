@@ -1,5 +1,5 @@
 import Piece from './piece';
-import { cordToPosition, isMoveOutOfBoard, isMoveOnOwnPiece, filterToPosition, generateOpponentMoves } from './utils';
+import { isMoveOutOfBoard, isMoveOnOwnPiece, filterToPosition, isKingMoveCheckmate } from './utils';
 
 class King extends Piece {
   constructor(x, y, side) {
@@ -15,25 +15,16 @@ class King extends Piece {
     ]);
   }
 
-  isMoveCheckmate(x, y, opponentMoves) {
-    return opponentMoves.has(cordToPosition(x, y));
-  }
-
-  findLegalMoves(opponentSide = false) {
-    return opponentSide ? this.findLegalMovesOpponentSide() : this.findLegalMovesThisSide();
-  }
-
-  findLegalMovesOpponentSide() {
+  findLegalMoves() {
     const possibleMoves = this.generateMoves();
-    const filterFn = (x, y) => isMoveOutOfBoard(x, y);
+    const filterFn = (x, y) =>
+      isMoveOutOfBoard(x, y) || isMoveOnOwnPiece(this.side, x, y) || isKingMoveCheckmate(this, x, y);
     return filterToPosition(possibleMoves, filterFn);
   }
 
-  findLegalMovesThisSide() {
+  findAttackMoves() {
     const possibleMoves = this.generateMoves();
-    const opponentMoves = generateOpponentMoves(this.side);
-    const filterFn = (x, y) =>
-      isMoveOutOfBoard(x, y) || isMoveOnOwnPiece(this.side, x, y) || this.isMoveCheckmate(x, y, opponentMoves);
+    const filterFn = (x, y) => isMoveOutOfBoard(x, y);
     return filterToPosition(possibleMoves, filterFn);
   }
 }

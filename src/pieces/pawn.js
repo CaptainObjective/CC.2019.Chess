@@ -6,13 +6,13 @@ import Knight from './knight';
 import Rook from './rook';
 
 class Pawn extends Piece {
-  
   constructor(x, y, side) {
     super(x, y, side);
     this.name = 'pawn';
     this.display = `<i class="fas fa-chess-pawn ${side}"></i>`;
   }
 
+  // prettier-ignore
   findLegalMoves() {
     const possibleMoves = [];
     const isSideWhite = (this.side == 'white') ? -1 : 1;
@@ -50,39 +50,41 @@ class Pawn extends Piece {
         
     return possibleMoves;
   }
-  
+
   move(id) {
     super.move(id);
     //does pawn promotion occur?
     if (this.x === 0 || this.x === 7) {
-      this.promote(id);
+      this.promote();
     }
   }
-  
-  promote(id) {
+
+  promote() {
     let el;
-    let pi = ['queen', 'bishop', 'knight', 'rook']
+    let pi = ['queen', 'bishop', 'knight', 'rook'];
 
     el = document.createElement('div');
     el.className = 'promoChoice';
-    el.id = "proCho";
-    document.getElementById("wrapper").appendChild(el);
-    
+    el.id = 'proCho';
+    document.getElementById('wrapper').appendChild(el);
+
     el = document.createElement('ul');
     el.className = 'promoChoiceList';
     el.id = 'proChoList';
-    document.getElementById("proCho").appendChild(el);
-    
+    document.getElementById('proCho').appendChild(el);
+
     for (let i = 0; i < pi.length; i++) {
       el = document.createElement('li');
       el.className = 'square';
       el.id = `proCho-${pi[i]}`;
-      document.getElementById("proChoList").appendChild(el);
-      
+      document.getElementById('proChoList').appendChild(el);
+
       el = document.createElement('i');
       el.className = `fas fa-chess-${pi[i]} black promoChoiceItem`;
-      el.addEventListener('click', e => { this.promoTouched(pi[i]); })
-      document.getElementById(`proCho-${pi[i]}`).appendChild(el);  
+      el.addEventListener('click', () => {
+        this.promoTouched(pi[i]);
+      });
+      document.getElementById(`proCho-${pi[i]}`).appendChild(el);
     }
   }
 
@@ -111,9 +113,13 @@ class Pawn extends Piece {
     let el = document.getElementById('wrapper');
     el.removeChild(el.lastChild);
   }
-  
+
   enPassant() {}
 
+  findAttackMoves() {
+    /* TODO */
+    return [];
+  }
 }
 
 export default Pawn;

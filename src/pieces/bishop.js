@@ -1,5 +1,5 @@
 import Piece from './piece';
-import { fMap, findLegalMovesLine, createGenerateLine } from './utils';
+import { fMap, findLegalMovesLine, createGenerateLine, findAttackMovesLine } from './utils';
 
 class Bishop extends Piece {
   constructor(x, y, side) {
@@ -14,7 +14,12 @@ class Bishop extends Piece {
 
   findLegalMoves() {
     const possibleMoves = this.generateMoves();
-    return fMap(possibleMoves, line => findLegalMovesLine(line, this.side));
+    return fMap(possibleMoves, line => findLegalMovesLine(line, this));
+  }
+
+  findAttackMoves() {
+    const possibleMoves = this.generateMoves();
+    return fMap(possibleMoves, line => findAttackMovesLine(line));
   }
 }
 

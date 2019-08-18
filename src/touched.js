@@ -1,4 +1,5 @@
-import board from './board';
+import board, { whiteKing, blackKing } from './board';
+import { isCheckmate } from './pieces/utils';
 
 const touched = e => {
   const x = e.currentTarget.id[0];
@@ -6,6 +7,15 @@ const touched = e => {
   if (!board[x][y]) {
     return;
   }
+
+  if (isCheckmate(whiteKing)) {
+    console.log('Szachmat! Czarny wygrywa!');
+  }
+
+  if (isCheckmate(blackKing)) {
+    console.log('Szachmat! Biały wygrywa!');
+  }
+
   const possibleMoves = board[x][y].findLegalMoves();
   for (let el of possibleMoves) {
     document.getElementById(el).className += ` possibleMove`;

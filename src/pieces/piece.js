@@ -22,6 +22,7 @@ class Piece {
   }
 
   findLegalMoves() {}
+  findAttackMoves() {}
 }
 
 export default Piece;
