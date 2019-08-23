@@ -4,6 +4,7 @@ import Queen from './queen';
 import Bishop from './bishop';
 import Knight from './knight';
 import Rook from './rook';
+import { filterToPosition, isMoveOutOfBoard, positionToCord, isPieceMoveCheckmate } from './utils';
 
 class Pawn extends Piece {
   constructor(x, y, side) {
@@ -15,7 +16,7 @@ class Pawn extends Piece {
   // prettier-ignore
   findLegalMoves() {
     const possibleMoves = [];
-    const isSideWhite = (this.side == 'white') ? -1 : 1;
+    const isSideWhite = (this.side === 'white') ? -1 : 1;
     const row = -2.5 * isSideWhite + 3.5;
     // Wyjście "z domu"
       if (this.x === row) {                                                   // Jeśli startuje "z domu"...
@@ -47,8 +48,9 @@ class Pawn extends Piece {
           }
         }
       }
-        
-    return possibleMoves;
+
+    const filterFn = (x, y) => isPieceMoveCheckmate(this, x, y);
+    return filterToPosition(possibleMoves.map(x => positionToCord(x)), filterFn);
   }
 
   move(id) {
@@ -116,9 +118,14 @@ class Pawn extends Piece {
 
   enPassant() {}
 
+  generateAttackMoves() {
+    return (this.side === 'white' ? [[-1, -1], [-1, 1]] : [[1, -1], [1, 1]]).map(([x, y]) => [this.x + x, this.y + y]);
+  }
+
   findAttackMoves() {
-    /* TODO */
-    return [];
+    const possibleMoves = this.generateAttackMoves();
+    const filterFn = (x, y) => isMoveOutOfBoard(x, y);
+    return filterToPosition(possibleMoves, filterFn);
   }
 }
 

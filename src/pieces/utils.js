@@ -4,6 +4,10 @@ function cordToPosition(x, y) {
   return `${x},${y}`;
 }
 
+function positionToCord(pos) {
+  return pos.split(',').map(x => Number(x));
+}
+
 function liftStopOnFirst(fn, stop = false) {
   return (...args) => stop || (stop = fn(...args));
 }
@@ -33,9 +37,14 @@ function isMoveOnOwnPiece(side, x, y) {
   return board[x][y] && board[x][y].side === side;
 }
 
+function isMoveOnOpponentPiece(side, x, y) {
+  return board[x][y] && board[x][y].side !== side;
+}
+
 function findLegalMovesLine(line, piece) {
-  const isMoveOnPieceDeferred = liftStopOnFirstDeferred(isMoveOnPiece);
-  let filterFn = (x, y) => isMoveOutOfBoard(x, y) || isMoveOnOwnPiece(piece.side, x, y) || isMoveOnPieceDeferred(x, y);
+  const isMoveOnOpponentPieceDeferred = liftStopOnFirstDeferred(isMoveOnOpponentPiece);
+  let filterFn = (x, y) =>
+    isMoveOutOfBoard(x, y) || isMoveOnOwnPiece(piece.side, x, y) || isMoveOnOpponentPieceDeferred(x, y);
   const filterFnWithStop = liftStopOnFirst(filterFn);
   filterFn = (x, y) => filterFnWithStop(x, y) || isPieceMoveCheckmate(piece, x, y);
   return filterToPosition(line, filterFn);
@@ -133,6 +142,7 @@ function isCheckmate(king) {
 
 export {
   cordToPosition,
+  positionToCord,
   liftStopOnFirst,
   liftStopOnFirstDeferred,
   fMap,
