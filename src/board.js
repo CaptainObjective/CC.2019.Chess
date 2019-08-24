@@ -1,10 +1,10 @@
-import Pawn from './pieces/pawn';
+import Pawn, { addPromoChoice } from './pieces/pawn';
 import Rook from './pieces/rook';
 import Bishop from './pieces/bishop';
 import Knight from './pieces/knight';
 import King from './pieces/king';
 import Queen from './pieces/queen';
-import {reportSaveState, toggleReport} from './reporting';
+import {reportSaveState, toggleReport, addReport} from './reporting';
 
 
 const board = new Array(8);
@@ -20,7 +20,8 @@ for (let i = 0; i < 8; i++) {
   pawn = new Pawn(1, i, 'black');
   board[pawn.x][pawn.y] = pawn;
 }
-// MareK: pionki ustawione
+
+// ==== MareK: pionki ustawione ====
 let knight = new Knight(0, 1, 'black');
 board[knight.x][knight.y] = knight;
 knight = new Knight(0, 6, 'black');
@@ -29,6 +30,7 @@ knight = new Knight(7, 1, 'white');
 board[knight.x][knight.y] = knight;
 knight = new Knight(7, 6, 'white');
 board[knight.x][knight.y] = knight;
+// =================================
 
 const blackKing = new King(0, 4, 'black');
 board[blackKing.x][blackKing.y] = blackKing;
@@ -60,8 +62,11 @@ board[bishop.x][bishop.y] = bishop;
 bishop = new Bishop(7, 5, 'white');
 board[bishop.x][bishop.y] = bishop;
 
-reportSaveState(board);           //zapisuje stan szachownicy - na potrzeby `gameReport`
+addReport();                      // uruchamia raport (domyślnie ukryty, przełączanie Alt+L)
+reportSaveState(board);           // zapisuje stan szachownicy - na potrzeby `gameReport`
 document.onkeyup = toggleReport;  // dodaje do aplikacji obsługę Alt+L: okno raportu
+
+addPromoChoice();                 // uruchamia DIV wyporu figury do promocji piona
 
 export default board;
 export { blackKing, whiteKing };

@@ -4,7 +4,34 @@ import Queen from './queen';
 import Bishop from './bishop';
 import Knight from './knight';
 import Rook from './rook';
-import {gameReport, notation, reloadReport} from '../reporting';
+import {gameReport, reloadReport} from '../reporting';
+
+export function addPromoChoice() {
+  let el;
+  let pi = ['queen', 'bishop', 'knight', 'rook']
+
+  el = document.createElement('div');
+  el.className = 'promoChoice';
+  el.id = "proCho";
+  document.getElementById("wrapper").appendChild(el);
+  
+  el = document.createElement('ul');
+  el.className = 'promoChoiceList';
+  el.id = 'proChoList';
+  document.getElementById("proCho").appendChild(el);
+  
+  for (let i = 0; i < pi.length; i++) {
+    el = document.createElement('li');
+    el.className = 'square';
+    el.id = `proCho-${pi[i]}`;
+    document.getElementById("proChoList").appendChild(el);
+    
+    el = document.createElement('i');
+    el.className = `fas fa-chess-${pi[i]} black promoChoiceItem`;
+    document.getElementById(`proCho-${pi[i]}`).appendChild(el);  
+  }
+  document.querySelector('.promoChoiceList').style.display = 'none';
+}
 
 class Pawn extends Piece {
   
@@ -61,30 +88,12 @@ class Pawn extends Piece {
   }
   
   promote(id) {
-    let el;
-    let pi = ['queen', 'bishop', 'knight', 'rook']
-
-    el = document.createElement('div');
-    el.className = 'promoChoice';
-    el.id = "proCho";
-    document.getElementById("wrapper").appendChild(el);
-    
-    el = document.createElement('ul');
-    el.className = 'promoChoiceList';
-    el.id = 'proChoList';
-    document.getElementById("proCho").appendChild(el);
-    
-    for (let i = 0; i < pi.length; i++) {
-      el = document.createElement('li');
-      el.className = 'square';
-      el.id = `proCho-${pi[i]}`;
-      document.getElementById("proChoList").appendChild(el);
-      
-      el = document.createElement('i');
-      el.className = `fas fa-chess-${pi[i]} black promoChoiceItem`;
-      el.addEventListener('click', e => { this.promoTouched(pi[i]); })
-      document.getElementById(`proCho-${pi[i]}`).appendChild(el);  
-    }
+    document.querySelector('.promoChoiceList').style.display = '';
+    let list = document.querySelectorAll('.promoChoiceList i');
+    list.forEach( (val, ind, obj) => {
+      let pi = /(queen|knight|bishop|rook)/.exec(obj[ind].className)[0];  // niby ma zwrócić string, a zwraca dwuelementowy array...
+      list[ind].addEventListener('click', e => { this.promoTouched(pi); });
+    })
   }
 
   promoTouched(piece) {
@@ -111,11 +120,9 @@ class Pawn extends Piece {
     document.getElementById(`${this.x},${this.y}`).innerHTML = board[this.x][this.y].display;
 
     gameReport[gameReport.length - 1].pawnPromoTo = piece[0].toUpperCase(); // dodanie do ostatniej pozycji w `gameReport` informacji o wyboranej figurze (promocja)
-    // console.log(gameReport.length + '. ' + notation(gameReport.length - 1)); // wyświetlenie ostatniego wpisu znotyfikowanego raportu gry
     reloadReport();
 
-    el = document.getElementById('wrapper');
-    el.removeChild(el.lastChild);
+    document.querySelector('.promoChoiceList').style.display = 'none';  
   }
   
   enPassant() {}

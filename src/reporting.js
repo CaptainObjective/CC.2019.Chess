@@ -29,8 +29,6 @@ export function reportSaveState(brd) {
 export function reportSaveMove(side, piece, coorFrom, coorTo, isCapture) {
     reportSaveState(board);
     gameReport.push(new gameReportItem(prevBoardState, currBoardState, side, piece, coor2nota(coorFrom), coor2nota(coorTo), isCapture));
-// console.log('Prev: ', prevBoardState, 'Curr: ', currBoardState);
-// console.log(gameReport[gameReport.length - 1]);
     let el = document.getElementsByClassName('pre-scrollable')[0];
     if (el) { el.innerHTML += gameReport.length + '. ' + notation(gameReport.length - 1) + '<br />'; }
 }
@@ -61,31 +59,42 @@ export function notation(id) {
     return abbr + ( (capture) ? 'x' : '' )  + to + ( (promo) ? `=${promo}` : '' );
 }
 
+export function addReport() {
+    const id = 'gameReport';
+    let parent = document.getElementById('wrapper');
+    let child;
+    let childId = parent.firstElementChild.id;
+    if (childId !== id) {   // dodajemy el. DIV#gameReport tylko, gdy go nie ma bezpośrednio przed wrapperem 
+        child = document.createElement('div');
+        child.id = id;
+        child.className = 'report';
+        child.innerHTML = '<h4>Raport</h4><pre class="pre-scrollable"></pre>';
+        parent.className = parent.className.replace('container', '') + ' container';
+        parent.className = parent.className.trim();
+        parent.insertBefore(child, parent.childNodes[0]);
+
+        let nodeList = document.querySelectorAll('#gameReport > *');    // ukrywa DIV raportu
+        for (let i = 0; i < nodeList.length; i++) {
+            nodeList[i].style.display = 'none';
+        }
+        
+        reloadReport(); // po dodaniu div raportu zawsze wypełnia się wszystkimi zapisami
+    }
+}
+
 export function toggleReport(e) {
     if (e.altKey && ('l' || 'L')) { // Alt+L: przełącza okienko raportu
-        const id = 'gameRprt';
-        let parent;
-        let child;
-        let el;
-        parent = document.getElementById('wrapper');
-        let childId = parent.firstElementChild.id;
-        if (childId !== id) {
-            child = document.createElement('div');
-            child.id = id;
-            child.className = 'rprt';
-            child.innerHTML = '<h3>Raport</h3><pre class="pre-scrollable"></pre>';
-            parent.className = parent.className.replace('container', '') + ' container';
-            parent.className = parent.className.trim();
-            parent.insertBefore(child, parent.childNodes[0]);
-            reloadReport(); // po pokazaniu okna raportu zawsze wypełnia wszystkimi zapisami
+        let nodeList = document.querySelectorAll('#gameReport > *');
+        if (nodeList[0].style.display === 'none') {
+            for (let i = 0; i < nodeList.length; i++) {
+                nodeList[i].style.display = '';
+            }
         } else {
-            parent = document.getElementById(id).parentElement;
-            parent.className = parent.className.replace('container', '');
-            parent.className = parent.className.trim();
-            parent.removeChild(parent.firstChild);
+            for (let i = 0; i < nodeList.length; i++) {
+                nodeList[i].style.display = 'none';
+            }
         }
-    }
-    
+    }    
 }
 
 export function reloadReport() { // odświeżenie raportu (usunięcie wszystkich i wyświetlenie wszystkich zapisów od nowa)
