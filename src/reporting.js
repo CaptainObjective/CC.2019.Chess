@@ -1,46 +1,52 @@
-// Moduł dodający obsługę posunięć (game reporting)
+// Moduł dodający obsługę historii posunięć (game reporting)
 // w oparciu o "Portable Game Notation" (https://en.wikipedia.org/wiki/Portable_Game_Notation)
 
-// import board from './board'
+import board from './board';
 
-class gameRprtItem {
+class gameReportItem {
     constructor(pbrd, cbrd, side, piece, from, to, capt = false, promo = '') {
-      this.prevBrd = pbrd;   // stan szachownicy przed posunięciem
-      this.currBrd = cbrd;   // stan szachownicy po posunięciu
-      this.side = side; // 'black' or 'white'
-      this.piece = piece;   // poruszona bierka
-      this.from = from;     // pole wyjściowe wykonanego ruchu (indeksy `board`, np. '6,4')
-      this.to = to;         // pole docelowe wykonanego ruchu (indeksy `board`, j.w.)
-      this.capture = capt;  // czy bicie?
-      this.pawnPromoTo = promo // pion promowany na..., w przeciwnym razie ''
+      this.prevBrd = pbrd;      // stan szachownicy przed posunięciem
+      this.currBrd = cbrd;      // stan szachownicy po posunięciu
+      this.side = side;         // 'black' or 'white'
+      this.piece = piece;       // poruszona bierka
+      this.from = from;         // pole wyjściowe wykonanego ruchu (indeksy `board`, np. '6,4')
+      this.to = to;             // pole docelowe wykonanego ruchu (indeksy `board`, j.w.)
+      this.capture = capt;      // czy bicie?
+      this.pawnPromoTo = promo  // pion promowany na..., w przeciwnym razie ''
     }
 }
 
 export let gameReport = [];    // tablica gromadząca obiekty o danych każdego posunięcia
 
-let currBrdState = [];  // globalna zmienna przechowująca OBECNY stan szachownicy
-let prevBrdState = [];  // globalna zmienna przechowująca POPRZEDNI (przed pozunięciem) stan szachownicy
+let currBoardState = [];  // globalna zmienna przechowująca OBECNY stan szachownicy
+let prevBoardState = [];  // globalna zmienna przechowująca POPRZEDNI (przed pozunięciem) stan szachownicy
 
-export function rprtSaveState(brd) {
-    prevBrdState = currBrdState.slice();
-    currBrdState = brd.slice().map( el => el.slice() );
-    for (let i = 0; i < currBrdState.length; i++) {
-        currBrdState[i] = currBrdState[i].map( el => Object.assign({}, el) ).slice();
-    }
+export function reportSaveState(brd) {
+    prevBoardState = JSON.parse(JSON.stringify(currBoardState, null, 3));
+    currBoardState = JSON.parse(JSON.stringify(brd, null, 3));
 };
 
-export function rprtSaveMvmnt(side, piece, coorFrom, coorTo, isCapture) {
-    gameReport.push(new gameRprtItem(prevBrdState, currBrdState, side, piece, coor2nota(coorFrom), coor2nota(coorTo), isCapture));
-    // gameReport.forEach( (value, index) => console.log((index + 1) + '. ' + notation(index)) ); // wyświetlenie całego znotyfikowanego raportu gry
-    // console.log(gameReport.length + '. ' + notation(gameReport.length - 1)); // wyświetlenie ostatniego wpisu znotyfikowanego raportu gry
+export function reportSaveMove(side, piece, coorFrom, coorTo, isCapture) {
+    reportSaveState(board);
+    gameReport.push(new gameReportItem(prevBoardState, currBoardState, side, piece, coor2nota(coorFrom), coor2nota(coorTo), isCapture));
+// console.log('Prev: ', prevBoardState, 'Curr: ', currBoardState);
+// console.log(gameReport[gameReport.length - 1]);
     let el = document.getElementsByClassName('pre-scrollable')[0];
     if (el) { el.innerHTML += gameReport.length + '. ' + notation(gameReport.length - 1) + '<br />'; }
 }
 
-function coor2nota(coor) {                              // zmiana współrzędnych `board` na notację szachową
-    const rprtRows = [8,7,6,5,4,3,2,1];
-    const rprtCols = ['a','b','c','d','e','f','g', 'h'];
-    return `${rprtCols[coor[2]]}${rprtRows[coor[0]]}`;
+function coor2nota(coor) {                              // zmiana współrzędnych `board` na notację szachową i odwrotnie
+    if (/([0-7],[0-7])|([a-g][1-8])/i.test(coor)) {
+        const rprtRows = ['8','7','6','5','4','3','2','1'];
+        const rprtCols = ['a','b','c','d','e','f','g','h'];
+        if (coor[1] === ',') {
+            return `${rprtCols[coor[2]]}${rprtRows[coor[0]]}`;
+        } else {
+            return `${rprtRows.indexOf(coor[1])},${rprtCols.indexOf(coor[0])}`;
+        }
+    } else {
+        console.log('Coś nie tak z parametrem `coor`: ' + coor);
+    }
 };
 
 export function notation(id) {

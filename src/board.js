@@ -4,7 +4,7 @@ import Bishop from './pieces/bishop';
 import Knight from './pieces/knight';
 import King from './pieces/king';
 import Queen from './pieces/queen';
-import {rprtSaveState, toggleReport} from './reporting';
+import {reportSaveState, toggleReport} from './reporting';
 
 
 const board = new Array(8);
@@ -60,7 +60,7 @@ board[bishop.x][bishop.y] = bishop;
 bishop = new Bishop(7, 5, 'white');
 board[bishop.x][bishop.y] = bishop;
 
-rprtSaveState(board);             //zapisuje stan szachownicy - na potrzeby `gameReport`
+reportSaveState(board);           //zapisuje stan szachownicy - na potrzeby `gameReport`
 document.onkeyup = toggleReport;  // dodaje do aplikacji obsługę Alt+L: okno raportu
 
 export default board;
