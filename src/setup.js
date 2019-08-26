@@ -14,11 +14,7 @@ const setup = () => {
       document.getElementById('board').appendChild(square);
     }
   }
-  document.getElementById('board').addEventListener('click', e => {
-    touched(e);
-  });
+  document.getElementById('board').addEventListener('click', touched);
 };
-
-
 
 export default setup;

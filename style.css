@@ -1,63 +1,97 @@
-html{
-    margin: 0;
+html {
+  margin: 0;
 }
-*{
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
 }
-#wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+#wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-#board{
-    display: flex;
-    flex-wrap: wrap;
-    outline: 5px black solid;
-    width: 80vh;
-    height: 80vh;
+#board {
+  display: flex;
+  flex-wrap: wrap;
+  outline: 5px black solid;
+  width: 80vh;
+  height: 80vh;
 }
-.square{
-    /* border: 1px darkslategrey solid; */
-    width: 10vh;
-    height: 10vh;
-    text-align:center;
-    line-height: 10vh;
-    font-size: 7.5vh;
-
+.square {
+  /* border: 1px darkslategrey solid; */
+  width: 10vh;
+  height: 10vh;
+  text-align: center;
+  line-height: 10vh;
+  font-size: 7.5vh;
 }
-.light{
-    background: rgb(215, 235, 243);
+.light {
+  background: rgb(215, 235, 243);
 }
-.dark{
-    background:rgb(107, 65, 3);
-    /* background:rgb(43, 43, 43); */
+.dark {
+  background: rgb(107, 65, 3);
+  /* background:rgb(43, 43, 43); */
 }
-.black{
-    color:black;
+.black {
+  color: black;
 }
-.white{
-    color:silver;
+.white {
+  color: silver;
 }
-.possibleMove{
-    background:rgba(222, 247, 2, 0.6);
+.possibleMove {
+  background: rgba(222, 247, 2, 0.6);
 }
 
 /* ======== ostylowanie PAWN ======== */
 .promoChoice {
-    width: 10vh;
-    height: 40vh;
-    background-color: lightgrey;
-    outline: 1px gray solid;
-    transform: translate(10px,2px);
+  width: 10vh;
+  height: 40vh;
+  background-color: lightgrey;
+  outline: 1px gray solid;
+  transform: translate(10px, 2px);
 }
 .promoChoiceItem:hover {
-    color: white;
+  color: white;
 }
 .promoChoiceList {
-    margin: 0 0;
-    list-style: none;
-    padding-left: 0;
+  margin: 0 0;
+  list-style: none;
+  padding-left: 0;
 }
 /* ================================== */
+
+.checkmate-box-wrapper {
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.checkmate-box {
+  display: flex;
+  flex-flow: column nowrap;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 200px;
+  background: black;
+  color: white;
+  font-size: 25px;
+}
+
+.checkmate-box > p:first-letter {
+  text-transform: capitalize;
+}
+
+.checkmate-box > p:first-of-type {
+  font-size: 1.5em;
+  border: 0;
+  margin: 0;
+}
